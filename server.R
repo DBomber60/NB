@@ -1,13 +1,36 @@
 library(shiny)
-library(ggplot2)
-library(simmer)
-library(dplyr)
-library(simmer.plot)
-library(parallel)
-library(xtable)
+#library(ggplot2)
+#library(simmer)
+#library(dplyr)
+#library(simmer.plot)
+#library(parallel)
+#library(xtable)
 source("marathon.R")
 
-# Define server logic required to draw a histogram
+
+install_load <- function (package1, ...)  {   
+  
+  # convert arguments to vector
+  packages <- c(package1, ...)
+  
+  # start loop to determine if each package is installed
+  for(package in packages){
+    
+    # if package is installed locally, load
+    if(package %in% rownames(installed.packages()))
+      do.call('library', list(package))
+    
+    # if package is not installed locally, download, then load
+    else {
+      install.packages(package)
+      do.call("library", list(package))
+    }
+  } 
+}
+
+install_load("ggplot2", "simmer", "dplyr", "simmer.plot", "parallel", "xtable")
+
+# Define server logic
 shinyServer(function(input, output) {
   output$arrival_rate = renderText({
     paste("Expected number of customers:", input$arrival_rate*600)
