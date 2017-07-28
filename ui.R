@@ -19,7 +19,7 @@ shinyUI(fluidPage(
                   min = 0.5, max = 1.5, value = .5),
       
       sliderInput("avgservicetime", 
-                  label = "Average Service Time",
+                  label = "Average Excess Service Time",
                   min = 0.5, max = 5, value = 1.1),
       
       sliderInput("walktime", 
