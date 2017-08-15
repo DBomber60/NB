@@ -10,7 +10,7 @@ shinyUI(fluidPage(
       
       sliderInput("arrival_rate", 
                   label = "Base Arrival Rate",
-                  min = 20, max = 40, value = 40),
+                  min = 20, max = 45, value = 40),
       
       sliderInput("peak_arrival_rate", 
                   label = "Peak Arrival Rate",
