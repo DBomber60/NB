@@ -14,7 +14,7 @@ shinyUI(fluidPage(
       
       sliderInput("peak_arrival_rate", 
                   label = "Peak Arrival Rate",
-                  min = 40, max = 60, value = 50),
+                  min = 40, max = 60, value = 43),
       
       sliderInput("peak_range", 
                   label = "Peak Time (Hour Range)",
@@ -24,15 +24,15 @@ shinyUI(fluidPage(
       
       sliderInput("min_service_time", 
                   label = "Minimum Service Time",
-                  min = 0.5, max = 1.5, value = .5),
+                  min = 0.5, max = 1, value = .5),
       
       sliderInput("avgservicetime", 
                   label = "Average Excess Service Time",
-                  min = 0.5, max = 5, value = 1.1),
+                  min = 0.5, max = 3, value = 1.3),
       
       sliderInput("walktime", 
                   label = "Average time to walk from line to cashier (seconds)",
-                  min = 5, max = 30, value = 10),
+                  min = 5, max = 20, value = 7),
       
       sliderInput("ppc", 
                   label = "Number of Cashiers",

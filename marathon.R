@@ -31,7 +31,7 @@ bank <-
   add_resource("counter1", ppc) %>%
   add_resource("counter2", ppc) %>%
   add_generator("Customer", customer, function() {c(0, rexp(arrival_rate*600, arrival_rate), -1)}) %>%
-  add_generator("Customer_Peak", customer, from_to(peak_begin,peak_end,function() 
+  add_generator("Customer_Peak", customer, from_to(peak_begin, peak_end, function() 
     {c(0, rexp((peak_arrival_rate-arrival_rate)*(peak_end-peak_begin), peak_arrival_rate), -1)}))
 
 bank %>% run(until = 600)
