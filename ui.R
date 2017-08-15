@@ -9,8 +9,16 @@ shinyUI(fluidPage(
       helpText("Examine Simulation Under Various Scenarios."),
       
       sliderInput("arrival_rate", 
-                  label = "Arrival Rate",
-                  min = 5, max = 60, value = 47),
+                  label = "Base Arrival Rate",
+                  min = 20, max = 40, value = 40),
+      
+      sliderInput("peak_arrival_rate", 
+                  label = "Peak Arrival Rate",
+                  min = 40, max = 60, value = 50),
+      
+      sliderInput("peak_range", 
+                  label = "Peak Time (Hour Range)",
+                  min = 0, max = 10, value = c(3,6)),
       
       textOutput("arrival_rate"),
       
@@ -29,11 +37,7 @@ shinyUI(fluidPage(
       sliderInput("ppc", 
                   label = "Number of Cashiers",
                   min = 10, max = 100, value = 80),
-      
-      sliderInput("leave_prob", 
-                  label = "Proportion of Customers Expected to Transact in Line",
-                  min = 0, max = .1, value = .05),
-      
+
       actionButton("go", "Run Simulation")
       
     ),

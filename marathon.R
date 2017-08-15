@@ -15,10 +15,11 @@ rm(list=ls())
 #counters = 2
 #ppc = 4 # people per counter
 
-marathon_plots = function(arrival_rate, avgservicetime, min_service_time, walktime, ppc, leave_prob) {
+marathon_plots = function(arrival_rate, peak_arrival_rate, peak_begin, peak_end, 
+                          avgservicetime, min_service_time, walktime, ppc) {
   customer <- 
     trajectory("Customer's path") %>%
-    leave(prob = function() runif(1) < leave_prob) %>%
+    #leave(prob = function() runif(1) < leave_prob) %>%
     simmer::select(c("counter1", "counter2"), policy = "shortest-queue") %>%
     seize_selected %>%
     timeout(function() {rexp(1, walktime^-1)}) %>%
@@ -29,7 +30,9 @@ bank <-
   simmer("bank") %>%
   add_resource("counter1", ppc) %>%
   add_resource("counter2", ppc) %>%
-  add_generator("Customer", customer, function() {c(0, rexp(arrival_rate*600, arrival_rate), -1)})
+  add_generator("Customer", customer, function() {c(0, rexp(arrival_rate*600, arrival_rate), -1)}) %>%
+  add_generator("Customer_Peak", customer, from_to(peak_begin,peak_end,function() 
+    {c(0, rexp((peak_arrival_rate-arrival_rate)*(peak_end-peak_begin), peak_arrival_rate), -1)}))
 
 bank %>% run(until = 600)
 
@@ -39,13 +42,15 @@ a = bank %>%
   arrange(start_time)
 
 # create data table
-greater15 = sum(ifelse(a$waiting_time>15,1,0))
+greater15 = sum(ifelse(a$waiting_time>=15,1,0))
+greater30 = sum(ifelse(a$waiting_time>=30,1,0))
 numserved = sum(a$finished==TRUE)
-numdropped = sum(a$finished==FALSE)
+#numdropped = sum(a$finished==FALSE)
 proplong = greater15/numserved
-dtable = as.data.frame(cbind(greater15, numserved, numdropped, proplong))
-names(dtable) = c("Number of Customers with Wait > 15 Minutes", "Total Customers Served with Cashier", 
-                  "Total Served in Line", "Proportion with Long Wait")
+proplonger = greater30/numserved
+dtable = as.data.frame(cbind(numserved, greater15, greater30, proplong, proplonger))
+names(dtable) = c("Total Customers Served", "No. of Customers > 15 min. wait", 
+                  "No. of Customers > 30 min. wait", "Prop. Wait > 15 min","Prop. Wait > 30 min")
 
 
 g1 = plot(bank, what="resources", metric="usage", steps=T, names= c("counter1", "counter2"))

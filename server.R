@@ -33,16 +33,21 @@ install_load("ggplot2", "simmer", "dplyr", "simmer.plot", "parallel", "xtable")
 # Define server logic
 shinyServer(function(input, output) {
   output$arrival_rate = renderText({
-    paste("Expected number of customers:", input$arrival_rate*600)
+    paste("Total expected number of customers:", input$arrival_rate*600 + 
+            (input$peak_arrival_rate-input$arrival_rate)*(input$peak_range[2]-input$peak_range[1])*60,"(Base:",input$arrival_rate*600,", 
+          Peak:",(input$peak_arrival_rate-input$arrival_rate)*(input$peak_range[2]-input$peak_range[1])*60,")")
   })
   
   v = reactiveValues(data = 0)
   
-  observeEvent(input$go, {v$data = marathon_plots(arrival_rate = input$arrival_rate, 
+  observeEvent(input$go, {v$data = marathon_plots(arrival_rate = input$arrival_rate,
+                                                  peak_arrival_rate = input$peak_arrival_rate,
+                                                  peak_begin = input$peak_range[1]*60,
+                                                  peak_end = input$peak_range[2]*60,
                                                   avgservicetime = input$avgservicetime,
                                                   min_service_time = input$min_service_time,
                                                   walktime = input$walktime/60,
-                                                  ppc = input$ppc/2, leave_prob = input$leave_prob)})
+                                                  ppc = input$ppc/2)})
 
   output$string = renderTable({
     if(length(v$data)==1) return()
