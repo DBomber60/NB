@@ -22,7 +22,7 @@ marathon_plots = function(arrival_rate, peak_arrival_rate, peak_begin, peak_end,
     #leave(prob = function() runif(1) < leave_prob) %>%
     simmer::select(c("counter1", "counter2"), policy = "shortest-queue") %>%
     seize_selected %>%
-    timeout(function() {rexp(1, (walktime-3)^-1)}) %>%
+    timeout(function() {rexp(1, (walktime)^-1)}) %>%
     timeout(function() {min_service_time+rexp(1, avgservicetime^-1)}) %>% # average service time
     release_selected
   

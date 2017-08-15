@@ -46,7 +46,7 @@ shinyServer(function(input, output) {
                                                   peak_end = input$peak_range[2]*60,
                                                   avgservicetime = input$avgservicetime,
                                                   min_service_time = input$min_service_time,
-                                                  walktime = input$walktime/60,
+                                                  walktime = (input$walktime-3)/60,
                                                   ppc = input$ppc/2)})
 
   output$string = renderTable({
